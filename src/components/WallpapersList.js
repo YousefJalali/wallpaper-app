@@ -6,10 +6,11 @@ import { connect } from "react-redux";
 import { openDetails } from "../store/actions/index";
 
 class WallpaperList extends React.Component {
-  onPressHandler = e => {
+  onPressHandler = (e, url) => {
     this.props.onOpenDetails();
 
-    const cardWidth = (Dimensions.get("window").width - 30) / 2;
+    const width = Dimensions.get("window").width;
+    const cardWidth = (width - 30) / 2;
     const cardHeight = (80 * cardWidth) / 50;
 
     const coordinates = {
@@ -17,15 +18,14 @@ class WallpaperList extends React.Component {
       left: e.nativeEvent.pageX - e.nativeEvent.locationX,
       height: cardHeight,
       width: cardWidth
-      // bottom: e.nativeEvent.pageY - e.nativeEvent.locationY + cardHeight,
-      // right: e.nativeEvent.pageX - e.nativeEvent.locationX + cardWidth
+      // bottom:
+      //   height - e.nativeEvent.pageY - e.nativeEvent.locationY + cardHeight,
+      // right: width - e.nativeEvent.pageX - e.nativeEvent.locationX + cardWidth
     };
 
-    //   console.log(e.nativeEvent);
-    //   console.log(coordinates);
-
     this.props.navigation.navigate("Details", {
-      coordinates
+      coordinates,
+      url
     });
   };
 
@@ -41,7 +41,7 @@ class WallpaperList extends React.Component {
             boxSizing: "border-box"
           }}
           renderItem={({ item }) => (
-            <Card onPress={e => this.onPressHandler(e)}>
+            <Card onPress={e => this.onPressHandler(e, item.url)}>
               <Image
                 source={{ uri: item.url }}
                 style={{ resizeMode: "cover" }}

@@ -170,9 +170,10 @@ const AnimatedHeader = Animated.createAnimatedComponent(Header);
 
 const Title = styled.Text`
   font-family: "Raleway-black";
-  /* font-size: ${WIDTH / 8}; */
   color: #fff;
   text-align: center;
+  margin-left: 10;
+  margin-right: 10;
 `;
 
 const AnimatedTitle = Animated.createAnimatedComponent(Title);
