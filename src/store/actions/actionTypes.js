@@ -1,0 +1,3 @@
+export const LOAD_FONTS = "LOAD_FONTS";
+
+export const LOAD_WALLPAPERS = "LOAD_WALLPAPERS";
