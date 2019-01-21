@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { connect } from "react-redux";
 import {
   ActivityIndicator,
@@ -13,6 +12,7 @@ import styled from "styled-components/native";
 import { loadFonts, fetchWallpapers } from "../store/actions/index";
 import background from "../assets/hero.jpg";
 import Carousel from "../components/Carousel";
+import WallpapersList from "../components/WallpapersList";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -22,21 +22,12 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 const MAX_FONT_SIZE = WIDTH / 8;
 const MIN_FONT_SIZE = WIDTH / 16;
 
-class Wallpapers extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      scrollY: new Animated.Value(0),
-      data: [
-        { id: 1, src: "monday" },
-        { id: 2, src: "thursday" },
-        { id: 3, src: "wednesday" },
-        { id: 4, src: "tuesday" },
-        { id: 5, src: "friday" },
-        { id: 6, src: "saturday" },
-        { id: 7, src: "sunday" }
-      ]
+      scrollY: new Animated.Value(0)
     };
   }
 
@@ -54,7 +45,7 @@ class Wallpapers extends React.Component {
 
     const headerBackground = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: ["transparent", "red"],
+      outputRange: ["transparent", "black"],
       extrapolate: "clamp"
     });
 
@@ -64,7 +55,6 @@ class Wallpapers extends React.Component {
       extrapolate: "clamp"
     });
 
-    // console.log(this.props.wallpapers)
     return (
       <View>
         {this.props.isFontLoaded ? (
@@ -82,6 +72,7 @@ class Wallpapers extends React.Component {
                 bottom: 0
               }}
             />
+
             <ScrollView
               scrollEventThrottle={16}
               onScroll={Animated.event([
@@ -90,9 +81,13 @@ class Wallpapers extends React.Component {
             >
               <ScrollViewContent>
                 <Carousel data={this.props.wallpapers} />
-                <List />
+                <WallpapersList
+                  data={this.props.wallpapers}
+                  // onPress={() => this.props.navigation.navigate('MyModal')}
+                />
               </ScrollViewContent>
             </ScrollView>
+
             <AnimatedHeader
               style={{
                 height: headerHeight,
@@ -102,7 +97,6 @@ class Wallpapers extends React.Component {
               <AnimatedTitle style={{ fontSize: titleSize }}>
                 SKULL WALLPAPERS
               </AnimatedTitle>
-              {/* <Title>WALLPAPERS</Title> */}
             </AnimatedHeader>
           </ImageBackground>
         ) : (
@@ -120,8 +114,9 @@ class Wallpapers extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    isFontLoaded: state.wallpapers.isFontLoaded,
-    wallpapers: state.wallpapers.wallpapers
+    isFontLoaded: state.ui.isFontLoaded,
+    wallpapers: state.wallpapers.wallpapers,
+    isDetailsVisible: state.wallpapers.isDetailsVisible
   };
 };
 
@@ -135,7 +130,7 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Wallpapers);
+)(Home);
 
 //layout & background
 const View = styled.View`
@@ -151,23 +146,11 @@ const ImageBackground = styled.ImageBackground`
 const ScrollView = styled.ScrollView`
   flex: 1;
   width: ${WIDTH};
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
 `;
 
 const ScrollViewContent = styled.ScrollView`
   margin-top: ${HEADER_MAX_HEIGHT};
-`;
-
-// const CarouselContainer = styled.View`
-//   width: 100%;
-//   height: ${HEIGHT / 4};
-//   background-color: blue;
-// `;
-
-const List = styled.View`
-  width: 100%;
-  height: ${HEIGHT};
-  background-color: pink;
 `;
 
 //header
@@ -178,7 +161,7 @@ const Header = styled.View`
   right: 0;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   overflow: hidden;
   background-color: transparent;
 `;

@@ -6,7 +6,6 @@ export const fetchWallpapers = () => {
     axios
       .get("https://jsonplaceholder.typicode.com/photos")
       .then(res => {
-        console.log(res.data.length);
         const data = res.data.slice(0, 10);
         return dispatch(loadWallpapers(data));
       })

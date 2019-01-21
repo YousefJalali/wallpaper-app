@@ -1,27 +1,35 @@
-import { LOAD_FONTS, LOAD_WALLPAPERS } from "../actions/actionTypes";
+import {
+  LOAD_WALLPAPERS,
+  OPEN_DETAILS,
+  CLOSE_DETAILS
+} from "../actions/actionTypes";
 
 const initialState = {
-  isFontLoaded: false,
-  wallpapers: []
+  wallpapers: [],
+  isDetailsVisible: false
 };
 
-const wallpapers = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
-    case LOAD_FONTS:
-      return {
-        ...state,
-        isFontLoaded: true
-      };
-
     case LOAD_WALLPAPERS:
       return {
         ...state,
         wallpapers: action.wallpapers
       };
 
+    case OPEN_DETAILS:
+      return {
+        ...state,
+        isDetailsVisible: true
+      };
+
+    case CLOSE_DETAILS:
+      return {
+        ...state,
+        isDetailsVisible: false
+      };
+
     default:
       return state;
   }
 };
-
-export default wallpapers;
