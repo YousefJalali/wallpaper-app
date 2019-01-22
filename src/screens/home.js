@@ -39,13 +39,13 @@ class Home extends React.Component {
     let cardHeight = height;
 
     if (height !== null) {
-      cardHeight = height;
-      cardWidth = (9 * height) / 16;
+      cardHeight = height - 10;
+      cardWidth = ((9 * height) / 16) - 10;
     }
 
     if (width !== null) {
       cardWidth = (screenWidth - 30) / 2;
-      cardHeight = (16 * cardWidth) / 9;
+      cardHeight = (16 * (screenWidth - 20) / 2) / 9;
     }
 
     const coordinates = {

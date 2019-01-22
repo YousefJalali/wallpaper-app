@@ -8,6 +8,7 @@ import { LinearGradient } from "expo";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
+const DURATION = 3000;
 
 class Details extends React.Component {
   state = {
@@ -32,24 +33,24 @@ class Details extends React.Component {
     Animated.timing(this.state.expandBackground, {
       toValue: 1,
       // delay: 1000,
-      duration: 300
+      duration: DURATION
     });
   shrinkBackground = () =>
     Animated.timing(this.state.shrinkBackground, {
       toValue: 0,
       // delay: 1000,
-      duration: 300
+      duration: DURATION
     });
 
   slideDownHeader = () =>
     Animated.timing(this.state.slideDownHeader, {
       toValue: 1,
-      duration: 300
+      duration: DURATION
     });
   slideUpHeader = () =>
     Animated.timing(this.state.slideUpHeader, {
       toValue: 0,
-      duration: 300
+      duration: DURATION
     });
 
   //close modal
@@ -99,6 +100,10 @@ class Details extends React.Component {
       width: backgroundAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.width, SCREEN_WIDTH]
+      }),
+      borderRadius: backgroundAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [10, 0]
       })
     };
 
