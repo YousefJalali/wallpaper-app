@@ -12,21 +12,21 @@ const SCREEN_HEIGHT = Dimensions.get("screen").height;
 class Details extends React.Component {
   state = {
     expandBackground: new Animated.Value(0),
-    expandHeader: new Animated.Value(0)
+    slideDownHeader: new Animated.Value(0),
+
+    shrinkBackground: new Animated.Value(1),
+    slideUpHeader: new Animated.Value(1),
+
+    isModalOpen: false
   };
 
   componentDidMount() {
     Animated.sequence([
       // Animated.delay(3000),
       this.expandBackground(),
-      this.expandHeader()
-    ]).start();
+      this.slideDownHeader()
+    ]).start(() => this.setState({ isModalOpen: true }));
   }
-
-  onCloseHandler = () => {
-    this.props.onCloseDetails();
-    this.props.navigation.goBack(null);
-  };
 
   expandBackground = () =>
     Animated.timing(this.state.expandBackground, {
@@ -34,41 +34,76 @@ class Details extends React.Component {
       // delay: 1000,
       duration: 300
     });
+  shrinkBackground = () =>
+    Animated.timing(this.state.shrinkBackground, {
+      toValue: 0,
+      // delay: 1000,
+      duration: 300
+    });
 
-  expandHeader = () =>
-    Animated.timing(this.state.expandHeader, {
+  slideDownHeader = () =>
+    Animated.timing(this.state.slideDownHeader, {
       toValue: 1,
       duration: 300
     });
+  slideUpHeader = () =>
+    Animated.timing(this.state.slideUpHeader, {
+      toValue: 0,
+      duration: 300
+    });
+
+  //close modal
+  onCloseHandler = () => {
+    // this.props.onCloseDetails();
+    Animated.sequence([this.slideUpHeader(), this.shrinkBackground()]).start(
+      () => {
+        this.setState({ isModalOpen: false });
+        this.props.navigation.goBack(null);
+      }
+    );
+  };
 
   render() {
     const { navigation } = this.props;
     const coordinates = navigation.getParam("coordinates");
     const url = navigation.getParam("url");
 
-    const { expandBackground, expandHeader } = this.state;
+    const {
+      expandBackground,
+      shrinkBackground,
+      slideDownHeader,
+      slideUpHeader
+    } = this.state;
+
+    let backgroundAnimation = expandBackground;
+    let headerAnimation = slideDownHeader;
+
+    if (this.state.isModalOpen) {
+      backgroundAnimation = shrinkBackground;
+      headerAnimation = slideUpHeader;
+    }
 
     const imageStyle = {
-      top: expandBackground.interpolate({
+      top: backgroundAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.top, 0]
       }),
-      left: expandBackground.interpolate({
+      left: backgroundAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.left, 0]
       }),
-      height: expandBackground.interpolate({
+      height: backgroundAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.height, SCREEN_HEIGHT]
       }),
-      width: expandBackground.interpolate({
+      width: backgroundAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.width, SCREEN_WIDTH]
       })
     };
 
-    const headerStyle = {
-      top: expandHeader.interpolate({
+    const slideDownHeaderStyle = {
+      top: headerAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [-SCREEN_HEIGHT / 8, 0]
       })
@@ -91,7 +126,7 @@ class Details extends React.Component {
             height: SCREEN_HEIGHT / 2
           }}
         />
-        <AnimatedHeader style={headerStyle}>
+        <AnimatedHeader style={slideDownHeaderStyle}>
           <Close>
             <TouchableOpacity onPress={this.onCloseHandler}>
               <Ionicons name="md-close" size={40} color="white" />
