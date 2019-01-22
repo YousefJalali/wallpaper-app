@@ -18,7 +18,6 @@ const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const HEADER_MAX_HEIGHT = HEIGHT / 2;
 
-
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -33,10 +32,21 @@ class Home extends React.Component {
     this.props.onFetchWallpapers();
   }
 
-  onCardPressHandler = (e, url) => {
-    const width = Dimensions.get("window").width;
-    const cardWidth = (width - 30) / 2;
-    const cardHeight = (80 * cardWidth) / 50;
+  onCardPressHandler = (e, url, height, width) => {
+    const screenWidth = Dimensions.get("window").width;
+
+    let cardWidth = width;
+    let cardHeight = height;
+
+    if (height !== null) {
+      cardHeight = height;
+      cardWidth = (9 * height) / 16;
+    }
+
+    if (width !== null) {
+      cardWidth = (screenWidth - 30) / 2;
+      cardHeight = (16 * cardWidth) / 9;
+    }
 
     const coordinates = {
       top: e.nativeEvent.pageY - e.nativeEvent.locationY,

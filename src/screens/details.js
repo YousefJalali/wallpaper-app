@@ -1,24 +1,26 @@
 import React from "react";
-import { Dimensions, Animated } from "react-native";
+import { Dimensions, Animated, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { connect } from "react-redux";
 import { closeDetails } from "../store/actions/index";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo";
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
-const SCREEN_HEIGHT = Dimensions.get("window").height;
+const SCREEN_WIDTH = Dimensions.get("screen").width;
+const SCREEN_HEIGHT = Dimensions.get("screen").height;
 
 class Details extends React.Component {
   state = {
-    expand: new Animated.Value(0)
+    expandBackground: new Animated.Value(0),
+    expandHeader: new Animated.Value(0)
   };
 
   componentDidMount() {
-    Animated.timing(this.state.expand, {
-      toValue: 1,
-      // delay: 100,
-      duration: 300
-      // useNativeDriver: true
-    }).start();
+    Animated.sequence([
+      // Animated.delay(3000),
+      this.expandBackground(),
+      this.expandHeader()
+    ]).start();
   }
 
   onCloseHandler = () => {
@@ -26,27 +28,49 @@ class Details extends React.Component {
     this.props.navigation.goBack(null);
   };
 
+  expandBackground = () =>
+    Animated.timing(this.state.expandBackground, {
+      toValue: 1,
+      // delay: 1000,
+      duration: 300
+    });
+
+  expandHeader = () =>
+    Animated.timing(this.state.expandHeader, {
+      toValue: 1,
+      duration: 300
+    });
+
   render() {
     const { navigation } = this.props;
     const coordinates = navigation.getParam("coordinates");
     const url = navigation.getParam("url");
 
+    const { expandBackground, expandHeader } = this.state;
+
     const imageStyle = {
-      top: this.state.expand.interpolate({
+      top: expandBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.top, 0]
       }),
-      left: this.state.expand.interpolate({
+      left: expandBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.left, 0]
       }),
-      height: this.state.expand.interpolate({
+      height: expandBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.height, SCREEN_HEIGHT]
       }),
-      width: this.state.expand.interpolate({
+      width: expandBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.width, SCREEN_WIDTH]
+      })
+    };
+
+    const headerStyle = {
+      top: expandHeader.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-SCREEN_HEIGHT / 8, 0]
       })
     };
 
@@ -55,12 +79,33 @@ class Details extends React.Component {
         <AnimatedImage
           source={{ uri: url }}
           style={[imageStyle, { resizeMode: "cover" }]}
-          // style={{ resizeMode: "cover" }}
           coordinates={coordinates}
         />
-        <Header>
-          <Button onPress={this.onCloseHandler} title="Dismiss " />
-        </Header>
+        <LinearGradient
+          colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            height: SCREEN_HEIGHT / 2
+          }}
+        />
+        <AnimatedHeader style={headerStyle}>
+          <Close>
+            <TouchableOpacity onPress={this.onCloseHandler}>
+              <Ionicons name="md-close" size={40} color="white" />
+            </TouchableOpacity>
+          </Close>
+          <Options>
+            <TouchableOpacity onPress={this.onCloseHandler}>
+              <Ionicons name="md-heart-empty" size={40} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.onCloseHandler}>
+              <Ionicons name="md-download" size={40} color="white" />
+            </TouchableOpacity>
+          </Options>
+        </AnimatedHeader>
       </Container>
     );
   }
@@ -84,25 +129,33 @@ const Container = styled.View`
 
 const Header = styled.View`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 20%;
-  border: 1px solid blue;
-  justify-content: center;
+  left: 10;
+  right: 10;
+  height: ${SCREEN_HEIGHT / 8};
+
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
 `;
 
-const Button = styled.Button`
-  border: 1px solid blue;
+const AnimatedHeader = Animated.createAnimatedComponent(Header);
+
+const Close = styled.View`
+  flex: 3;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const Options = styled.View`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Image = styled.Image`
   position: absolute;
-  /* top: ${props => props.coordinates.top};
-  left: ${props => props.coordinates.left};
-  right: ${props => SCREEN_WIDTH - props.coordinates.right};
-  bottom: ${props => SCREEN_HEIGHT - props.coordinates.bottom}; */
 `;
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);

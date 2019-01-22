@@ -2,14 +2,16 @@ import React from "react";
 import styled from "styled-components/native";
 import Card from "./Card";
 
-const _renderItem = ({ item }, props, height, width) => (
-  <Card
-    onPress={e => props.onPress(e, item.url)}
-    url={item.url}
-    width={width}
-    height={height}
-  />
-);
+const _renderItem = ({ item }, props, height, width) => {
+  return (
+    <Card
+      onPress={e => props.onPress(e, item.url, height, width)}
+      url={item.url}
+      width={width}
+      height={height}
+    />
+  );
+};
 
 export default props => (
   <Container>
@@ -26,10 +28,6 @@ export default props => (
       <FlatList
         data={props.data}
         numColumns={2}
-        columnWrapperStyle={{
-          paddingHorizontal: 5,
-          boxSizing: "border-box"
-        }}
         renderItem={({ item }) => _renderItem({ item }, props, null, 50)}
         keyExtractor={item => `'' + ${item.id}`}
       />
@@ -54,5 +52,7 @@ const Title = styled.Text`
 
 const FlatList = styled.FlatList`
   flex: 1;
+  padding-right: 5;
+  padding-left: 5;
   height: ${props => (props.horizontal ? props.height || 180 : "100%")};
 `;

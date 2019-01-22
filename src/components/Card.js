@@ -1,8 +1,5 @@
 import React from "react";
-import { Dimensions } from "react-native";
 import styled from "styled-components/native";
-
-const WIDTH = Dimensions.get("window").width;
 
 export default props => (
   <Card onPress={props.onPress} width={props.width} height={props.height}>
@@ -18,7 +15,6 @@ const Card = styled.TouchableOpacity`
   padding-left: ${props => (props.height ? (9 * props.height) / 16 : 0)};
 
   overflow: hidden;
-  border: 1px solid red;
 `;
 
 const Image = styled.Image`
