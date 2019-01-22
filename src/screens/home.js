@@ -11,8 +11,7 @@ import styled from "styled-components/native";
 
 import { loadFonts, fetchWallpapers } from "../store/actions/index";
 import background from "../assets/hero.jpg";
-import Carousel from "../components/Carousel";
-import WallpapersList from "../components/WallpapersList";
+import FlatList from "../components/FlatList";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -100,8 +99,14 @@ class Home extends React.Component {
               ])}
             >
               <ScrollViewContent>
-                <Carousel data={this.props.wallpapers} />
-                <WallpapersList
+                <FlatList
+                  title="New"
+                  data={this.props.wallpapers}
+                  onPress={this.onCardPressHandler}
+                  horizontal={true}
+                />
+                <FlatList
+                  title="Explore"
                   data={this.props.wallpapers}
                   onPress={this.onCardPressHandler}
                 />
