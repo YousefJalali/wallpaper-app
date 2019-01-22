@@ -15,15 +15,15 @@ class Details extends React.Component {
   componentDidMount() {
     Animated.timing(this.state.expand, {
       toValue: 1,
-      delay: 100,
-      duration: 500
+      // delay: 100,
+      duration: 300
       // useNativeDriver: true
     }).start();
   }
 
   onCloseHandler = () => {
     this.props.onCloseDetails();
-    this.props.navigation.goBack();
+    this.props.navigation.goBack(null);
   };
 
   render() {

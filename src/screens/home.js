@@ -36,6 +36,26 @@ class Home extends React.Component {
     this.props.onFetchWallpapers();
   }
 
+  onCardPressHandler = (e, url) => {
+    //   this.props.onOpenDetails();
+
+    const width = Dimensions.get("window").width;
+    const cardWidth = (width - 30) / 2;
+    const cardHeight = (80 * cardWidth) / 50;
+
+    const coordinates = {
+      top: e.nativeEvent.pageY - e.nativeEvent.locationY,
+      left: e.nativeEvent.pageX - e.nativeEvent.locationX,
+      height: cardHeight,
+      width: cardWidth
+    };
+
+    this.props.navigation.navigate("Details", {
+      coordinates,
+      url
+    });
+  };
+
   render() {
     const headerHeight = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -83,7 +103,7 @@ class Home extends React.Component {
                 <Carousel data={this.props.wallpapers} />
                 <WallpapersList
                   data={this.props.wallpapers}
-                  // onPress={() => this.props.navigation.navigate('MyModal')}
+                  onPress={this.onCardPressHandler}
                 />
               </ScrollViewContent>
             </ScrollView>

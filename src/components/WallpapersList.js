@@ -1,34 +1,11 @@
 import React from "react";
-import { TouchableOpacity, Dimensions } from "react-native";
 import styled from "styled-components/native";
 import { withNavigation } from "react-navigation";
 import { connect } from "react-redux";
 import { openDetails } from "../store/actions/index";
+import Card from "../components/Card";
 
 class WallpaperList extends React.Component {
-  onPressHandler = (e, url) => {
-    this.props.onOpenDetails();
-
-    const width = Dimensions.get("window").width;
-    const cardWidth = (width - 30) / 2;
-    const cardHeight = (80 * cardWidth) / 50;
-
-    const coordinates = {
-      top: e.nativeEvent.pageY - e.nativeEvent.locationY,
-      left: e.nativeEvent.pageX - e.nativeEvent.locationX,
-      height: cardHeight,
-      width: cardWidth
-      // bottom:
-      //   height - e.nativeEvent.pageY - e.nativeEvent.locationY + cardHeight,
-      // right: width - e.nativeEvent.pageX - e.nativeEvent.locationX + cardWidth
-    };
-
-    this.props.navigation.navigate("Details", {
-      coordinates,
-      url
-    });
-  };
-
   render() {
     return (
       <Container>
@@ -41,12 +18,10 @@ class WallpaperList extends React.Component {
             boxSizing: "border-box"
           }}
           renderItem={({ item }) => (
-            <Card onPress={e => this.onPressHandler(e, item.url)}>
-              <Image
-                source={{ uri: item.url }}
-                style={{ resizeMode: "cover" }}
-              />
-            </Card>
+            <Card
+              onPress={e => this.props.onPress(e, item.url)}
+              url={item.url}
+            />
           )}
           keyExtractor={item => `'' + ${item.id}`}
         />
@@ -55,16 +30,18 @@ class WallpaperList extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  onOpenDetails: () => dispatch(openDetails())
-});
+// const mapDispatchToProps = dispatch => ({
+//   onOpenDetails: () => dispatch(openDetails())
+// });
 
-export default withNavigation(
-  connect(
-    null,
-    mapDispatchToProps
-  )(WallpaperList)
-);
+// export default withNavigation(
+//   connect(
+//     null,
+//     mapDispatchToProps
+//   )(WallpaperList)
+// );
+
+export default WallpaperList;
 
 const Container = styled.View`
   flex: 1;
@@ -82,20 +59,4 @@ const Title = styled.Text`
 
 const FlatList = styled.FlatList`
   flex: 1;
-`;
-
-const Card = styled.TouchableOpacity`
-  width: 50%;
-  padding-top: 80%;
-  /* border: 1px solid blue; */
-  overflow: hidden;
-`;
-
-const Image = styled.Image`
-  position: absolute;
-  top: 5;
-  bottom: 5;
-  left: 5;
-  right: 5;
-  border-radius: 10;
 `;

@@ -80,50 +80,113 @@ const transitionConfig = () => {
       };
     },
     containerStyle: {
-      backgroundColor: "transparent",
-      opacity: 1
+      backgroundColor: "transparent"
     }
   };
 };
 
-const MainStack = createStackNavigator(
+// const MainStack = createStackNavigator(
+//   {
+//     Home: Home
+//   },
+//   {
+//     initialRouteName: "Home",
+//     defaultNavigationOptions: {
+//       header: null
+//     },
+//     // transparentCard: true,
+//     // cardStyle: {
+//     //   backgroundColor: "transparent",
+//     //   opacity: 1
+//     // },
+//     transitionConfig: () => ({
+//       containerStyle: {
+//         backgroundColor: "transparent"
+//       }
+//     })
+//   }
+// );
+
+// const RootStack = createStackNavigator(
+//   {
+//     Main: {
+//       screen: MainStack
+//     },
+//     Details: {
+//       screen: Details
+//     }
+//   },
+//   {
+//     mode: "card",
+//     headerMode: "none",
+//     transparentCard: true,
+//     cardStyle: {
+//       backgroundColor: "transparent",
+//       opacity: 1
+//     },
+//     cardShadowEnabled: false,
+//     transitionConfig
+//   }
+// );
+
+// const AppContainer = createAppContainer(RootStack);
+
+const MainStackNavigator = createStackNavigator(
   {
-    Home: Home
+    Settings: {
+      screen: Home
+    }
   },
   {
-    initialRouteName: "Home",
-    defaultNavigationOptions: {
-      header: null
-    },
-    transparentCard: true,
-    cardStyle: {
-      backgroundColor: "transparent",
-      opacity: 1
-    },
-    cardShadowEnabled: false,
+    headerMode: "none"
   }
 );
 
-const RootStack = createStackNavigator(
+const ModalDialogStackNavigator = createStackNavigator(
   {
-    Main: {
-      screen: MainStack
-    },
-    Details: {
+    Settings: {
       screen: Details
     }
   },
   {
-    mode: "card",
-    headerMode: "none",
     transparentCard: true,
     cardStyle: {
-      backgroundColor: "transparent",
-      opacity: 1
+      backgroundColor: "transparent"
     },
-    cardShadowEnabled: false,
-    transitionConfig
+    headerMode: "none",
+    transitionConfig: () => ({
+      containerStyle: {
+        backgroundColor: "transparent"
+      }
+    })
   }
 );
 
-const AppContainer = createAppContainer(RootStack);
+const AppContainer = createAppContainer(
+  createStackNavigator(
+    {
+      Home: {
+        screen: MainStackNavigator
+      },
+      Details: {
+        screen: ModalDialogStackNavigator
+      }
+    },
+    {
+      initialRouteName: "Home",
+      transparentCard: true,
+      headerMode: "none",
+      transitionConfig: () => ({
+        screenInterpolator: sceneProps => {
+          const { position, scene } = sceneProps;
+          const { index } = scene;
+          const opacity = position.interpolate({
+            inputRange: [index - 1, index],
+            outputRange: [0, 1]
+          });
+          return { opacity };
+        }
+      })
+    }
+  )
+);
