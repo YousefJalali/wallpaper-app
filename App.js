@@ -5,6 +5,7 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import storeConfig from "./src/store/storeConfig";
 
 import Home from "./src/screens/home";
+import Favorite from "./src/screens/favorite";
 import Details from "./src/screens/details";
 
 I18nManager.allowRTL(false);
@@ -21,20 +22,20 @@ export default class App extends React.Component {
   }
 }
 
-const MainStackNavigator = createStackNavigator(
-  {
-    Settings: {
-      screen: Home
-    }
-  },
-  {
-    headerMode: "none"
-  }
-);
+// const MainStackNavigator = createStackNavigator(
+//   {
+//     Main: {
+//       screen: Home
+//     }
+//   },
+//   {
+//     headerMode: "none"
+//   }
+// );
 
 const ModalDialogStackNavigator = createStackNavigator(
   {
-    Settings: {
+    Modal: {
       screen: Details
     }
   },
@@ -56,7 +57,10 @@ const AppContainer = createAppContainer(
   createStackNavigator(
     {
       Home: {
-        screen: MainStackNavigator
+        screen: Home
+      },
+      Favorite: {
+        screen: Favorite
       },
       Details: {
         screen: ModalDialogStackNavigator

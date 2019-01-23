@@ -1,8 +1,8 @@
 import React from "react";
 import { Dimensions, Animated, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-// import { connect } from "react-redux";
-// import { closeDetails } from "../store/actions/index";
+import { connect } from "react-redux";
+import { addToFavorite, removeFromFavorite } from "../store/actions/index";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
 
@@ -11,6 +11,13 @@ const SCREEN_HEIGHT = Dimensions.get("screen").height;
 const DURATION = 300;
 
 class Details extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.id = this.props.navigation.getParam("id");
+    this.url = this.props.navigation.getParam("url");
+  }
+
   state = {
     fadeInGradient: new Animated.Value(0),
     fadeOutGradient: new Animated.Value(1),
@@ -21,7 +28,8 @@ class Details extends React.Component {
     slideDownHeader: new Animated.Value(0),
     slideUpHeader: new Animated.Value(1),
 
-    isModalOpen: false
+    isModalOpen: false,
+    isButtonFavPressed: false
   };
 
   componentDidMount() {
@@ -81,10 +89,20 @@ class Details extends React.Component {
       duration: DURATION
     });
 
+  onToggleFavoriteHandler = () => {
+    if (this.state.isButtonFavPressed) {
+      this.props.onRemoveFromFavorite(this.id);
+    } else {
+      this.props.onAddToFavorite(this.id);
+    }
+    this.setState(prevState => ({
+      isButtonFavPressed: !prevState.isButtonFavPressed
+    }));
+    this.props.navigation.navigate("Favorite");
+  };
+
   render() {
-    const { navigation } = this.props;
-    const coordinates = navigation.getParam("coordinates");
-    const url = navigation.getParam("url");
+    const coordinates = this.props.navigation.getParam("coordinates");
 
     const {
       fadeInGradient,
@@ -138,10 +156,10 @@ class Details extends React.Component {
     return (
       <Container>
         <AnimatedImage
-          source={{ uri: url }}
+          source={{ uri: this.url }}
           style={[imageStyle, { resizeMode: "cover" }]}
         />
-        
+
         <AnimatedGradient style={{ opacity: gradientAnimation }}>
           <LinearGradient
             colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
@@ -158,7 +176,7 @@ class Details extends React.Component {
             </TouchableOpacity>
           </Close>
           <Options>
-            <TouchableOpacity onPress={this.onCloseHandler}>
+            <TouchableOpacity onPress={this.onToggleFavoriteHandler}>
               <Ionicons name="md-heart-empty" size={40} color="white" />
             </TouchableOpacity>
             <TouchableOpacity onPress={this.onCloseHandler}>
@@ -171,16 +189,17 @@ class Details extends React.Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-//   onCloseDetails: () => dispatch(closeDetails())
-// });
+const mapDispatchToProps = dispatch => ({
+  onAddToFavorite: id => dispatch(addToFavorite(id)),
+  onRemoveFromFavorite: id => dispatch(removeFromFavorite(id))
+});
 
-// export default connect(
-//   null,
-//   mapDispatchToProps
-// )(Details);
+export default connect(
+  null,
+  mapDispatchToProps
+)(Details);
 
-export default Details;
+// export default Details;
 
 const Container = styled.View`
   flex: 1;

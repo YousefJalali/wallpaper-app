@@ -6,13 +6,13 @@ import {
   Dimensions,
   Animated
 } from "react-native";
-import { LinearGradient } from "expo";
 import styled from "styled-components/native";
 
-import { loadFonts, fetchWallpapers } from "../store/actions/index";
-import background from "../assets/hero.jpg";
+import Layout from "../components/Layout";
 import FlatList from "../components/FlatList";
 import Header from "../components/Header";
+
+import { loadFonts, fetchWallpapers } from "../store/actions/index";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -32,85 +32,30 @@ class Home extends React.Component {
     this.props.onFetchWallpapers();
   }
 
-  onCardPressHandler = (e, url, height, width) => {
-    const screenWidth = Dimensions.get("window").width;
-
-    let cardWidth = width;
-    let cardHeight = height;
-
-    if (height !== null) {
-      cardHeight = height - 10;
-      cardWidth = ((9 * height) / 16) - 10;
-    }
-
-    if (width !== null) {
-      cardWidth = (screenWidth - 30) / 2;
-      cardHeight = (16 * (screenWidth - 20) / 2) / 9;
-    }
-
-    const coordinates = {
-      top: e.nativeEvent.pageY - e.nativeEvent.locationY,
-      left: e.nativeEvent.pageX - e.nativeEvent.locationX,
-      height: cardHeight,
-      width: cardWidth
-    };
-
-    this.props.navigation.navigate("Details", {
-      coordinates,
-      url
-    });
-  };
-
   render() {
-    return (
-      <View>
-        {this.props.isFontLoaded ? (
-          <ImageBackground
-            source={background}
-            style={{ width: "100%", height: "100%" }}
-          >
-            <LinearGradient
-              colors={["#000", "transparent", "#000"]}
-              style={{
-                position: "absolute",
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-              }}
+    return this.props.isFontLoaded ? (
+      <Layout>
+        <ScrollView
+          scrollEventThrottle={16}
+          onScroll={Animated.event([
+            { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
+          ])}
+        >
+          <ScrollViewContent>
+            <FlatList
+              title="New"
+              data={this.props.wallpapers}
+              horizontal={true}
             />
-
-            <ScrollView
-              scrollEventThrottle={16}
-              onScroll={Animated.event([
-                { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
-              ])}
-            >
-              <ScrollViewContent>
-                <FlatList
-                  title="New"
-                  data={this.props.wallpapers}
-                  onPress={this.onCardPressHandler}
-                  horizontal={true}
-                />
-                <FlatList
-                  title="Explore"
-                  data={this.props.wallpapers}
-                  onPress={this.onCardPressHandler}
-                />
-              </ScrollViewContent>
-            </ScrollView>
-            <Header scrollY={this.state.scrollY} />
-          </ImageBackground>
-        ) : (
-          <ImageBackground
-            source={background}
-            style={{ width: "100%", height: "100%" }}
-          >
-            <ActivityIndicator size="large" color="#ccc" />
-          </ImageBackground>
-        )}
-      </View>
+            <FlatList title="Explore" data={this.props.wallpapers} />
+          </ScrollViewContent>
+        </ScrollView>
+        <Header scrollY={this.state.scrollY} />
+      </Layout>
+    ) : (
+      <Layout>
+        <ActivityIndicator size="large" color="#ccc" />
+      </Layout>
     );
   }
 }
@@ -134,16 +79,6 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Home);
-
-//layout & background
-const View = styled.View`
-  flex: 1;
-`;
-
-const ImageBackground = styled.ImageBackground`
-  justify-content: center;
-  align-items: center;
-`;
 
 //scroll
 const ScrollView = styled.ScrollView`

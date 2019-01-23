@@ -1,11 +1,14 @@
 import {
   LOAD_WALLPAPERS,
   OPEN_DETAILS,
-  CLOSE_DETAILS
+  CLOSE_DETAILS,
+  ADD_TO_FAVORITE,
+  REMOVE_FROM_FAVORITE
 } from "../actions/actionTypes";
 
 const initialState = {
   wallpapers: [],
+  favorite: [],
   isDetailsVisible: false
 };
 
@@ -27,6 +30,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isDetailsVisible: false
+      };
+
+    case ADD_TO_FAVORITE:
+      return {
+        ...state,
+        favorite: state.favorite.concat(action.id)
+      };
+
+    case REMOVE_FROM_FAVORITE:
+      return {
+        ...state,
+        favorite: state.favorite.filter(id => id !== action.id)
       };
 
     default:
