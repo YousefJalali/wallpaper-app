@@ -1,12 +1,17 @@
 import React from "react";
-import { I18nManager, Animated, Easing, StatusBar } from "react-native";
+import { I18nManager, StatusBar } from "react-native";
 import { Provider } from "react-redux";
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import {
+  createStackNavigator,
+  createAppContainer,
+  createDrawerNavigator
+} from "react-navigation";
 import storeConfig from "./src/store/storeConfig";
 
 import Home from "./src/screens/home";
 import Favorite from "./src/screens/favorite";
 import Details from "./src/screens/details";
+import SideDrawer from "./src/screens/sideDrawer";
 
 I18nManager.allowRTL(false);
 const store = storeConfig();
@@ -22,22 +27,27 @@ export default class App extends React.Component {
   }
 }
 
-// const MainStackNavigator = createStackNavigator(
-//   {
-//     Main: {
-//       screen: Home
-//     }
-//   },
-//   {
-//     headerMode: "none"
-//   }
-// );
-
-const ModalDialogStackNavigator = createStackNavigator(
+const HomeStack = createStackNavigator(
   {
-    Modal: {
-      screen: Details
-    }
+    Home: Home
+  },
+  {
+    headerMode: "none"
+  }
+);
+
+const FavoriteStack = createStackNavigator(
+  {
+    Favorite: Favorite
+  },
+  {
+    headerMode: "none"
+  }
+);
+
+const DetailsModal = createStackNavigator(
+  {
+    Details: Details
   },
   {
     transparentCard: true,
@@ -53,34 +63,57 @@ const ModalDialogStackNavigator = createStackNavigator(
   }
 );
 
-const AppContainer = createAppContainer(
-  createStackNavigator(
-    {
-      Home: {
-        screen: Home
-      },
-      Favorite: {
-        screen: Favorite
-      },
-      Details: {
-        screen: ModalDialogStackNavigator
-      }
+const SideDrawerModal = createStackNavigator(
+  {
+    SideDrawer: SideDrawer
+  },
+  {
+    transparentCard: true,
+    cardStyle: {
+      backgroundColor: "transparent"
     },
-    {
-      initialRouteName: "Home",
-      transparentCard: true,
-      headerMode: "none",
-      transitionConfig: () => ({
-        screenInterpolator: sceneProps => {
-          const { position, scene } = sceneProps;
-          const { index } = scene;
-          const opacity = position.interpolate({
-            inputRange: [index - 1, index],
-            outputRange: [0, 1]
-          });
-          return { opacity };
-        }
-      })
-    }
-  )
+    headerMode: "none",
+    transitionConfig: () => ({
+      containerStyle: {
+        backgroundColor: "transparent"
+      }
+    })
+  }
 );
+
+const RootStack = createStackNavigator(
+  {
+    Home: {
+      screen: HomeStack
+    },
+    Favorite: {
+      screen: FavoriteStack
+    },
+    Details: {
+      screen: DetailsModal
+    },
+    SideDrawer: {
+      screen: SideDrawerModal
+    }
+  },
+  {
+    initialRouteName: "Home",
+    transparentCard: true,
+    headerMode: "none",
+    transitionConfig: () => ({
+      screenInterpolator: sceneProps => {
+        const { position, scene } = sceneProps;
+        const { index } = scene;
+        const opacity = position.interpolate({
+          inputRange: [index - 1, index],
+          outputRange: [0, 1]
+        });
+        return { opacity };
+      }
+    })
+  }
+);
+
+// const DrawerNavigator = DrawerNavigator(RootStack);
+
+const AppContainer = createAppContainer(RootStack);

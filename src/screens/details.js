@@ -8,7 +8,7 @@ import { LinearGradient } from "expo";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
-const DURATION = 300;
+const DURATION = 200;
 
 class Details extends React.Component {
   constructor(props) {
