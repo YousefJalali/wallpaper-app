@@ -1,21 +1,24 @@
 import React from "react";
 import { Dimensions, Animated, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import { connect } from "react-redux";
-import { closeDetails } from "../store/actions/index";
+// import { connect } from "react-redux";
+// import { closeDetails } from "../store/actions/index";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
-const DURATION = 3000;
+const DURATION = 300;
 
 class Details extends React.Component {
   state = {
-    expandBackground: new Animated.Value(0),
-    slideDownHeader: new Animated.Value(0),
+    fadeInGradient: new Animated.Value(0),
+    fadeOutGradient: new Animated.Value(1),
 
+    expandBackground: new Animated.Value(0),
     shrinkBackground: new Animated.Value(1),
+
+    slideDownHeader: new Animated.Value(0),
     slideUpHeader: new Animated.Value(1),
 
     isModalOpen: false
@@ -24,24 +27,49 @@ class Details extends React.Component {
   componentDidMount() {
     Animated.sequence([
       // Animated.delay(3000),
+      this.fadeInGradient(),
       this.expandBackground(),
       this.slideDownHeader()
     ]).start(() => this.setState({ isModalOpen: true }));
   }
 
+  //close modal
+  onCloseHandler = () => {
+    Animated.sequence([
+      this.fadeOutGradient(),
+      this.slideUpHeader(),
+      this.shrinkBackground()
+    ]).start(() => {
+      this.setState({ isModalOpen: false });
+      this.props.navigation.goBack(null);
+    });
+  };
+
+  //gradient animation
+  fadeInGradient = () =>
+    Animated.timing(this.state.fadeInGradient, {
+      toValue: 1,
+      duration: DURATION / 10
+    });
+  fadeOutGradient = () =>
+    Animated.timing(this.state.fadeOutGradient, {
+      toValue: 0,
+      duration: DURATION
+    });
+
+  //image animation
   expandBackground = () =>
     Animated.timing(this.state.expandBackground, {
       toValue: 1,
-      // delay: 1000,
       duration: DURATION
     });
   shrinkBackground = () =>
     Animated.timing(this.state.shrinkBackground, {
       toValue: 0,
-      // delay: 1000,
       duration: DURATION
     });
 
+  //header animation
   slideDownHeader = () =>
     Animated.timing(this.state.slideDownHeader, {
       toValue: 1,
@@ -53,33 +81,26 @@ class Details extends React.Component {
       duration: DURATION
     });
 
-  //close modal
-  onCloseHandler = () => {
-    // this.props.onCloseDetails();
-    Animated.sequence([this.slideUpHeader(), this.shrinkBackground()]).start(
-      () => {
-        this.setState({ isModalOpen: false });
-        this.props.navigation.goBack(null);
-      }
-    );
-  };
-
   render() {
     const { navigation } = this.props;
     const coordinates = navigation.getParam("coordinates");
     const url = navigation.getParam("url");
 
     const {
+      fadeInGradient,
+      fadeOutGradient,
       expandBackground,
       shrinkBackground,
       slideDownHeader,
       slideUpHeader
     } = this.state;
 
+    let gradientAnimation = fadeInGradient;
     let backgroundAnimation = expandBackground;
     let headerAnimation = slideDownHeader;
 
     if (this.state.isModalOpen) {
+      gradientAnimation = fadeOutGradient;
       backgroundAnimation = shrinkBackground;
       headerAnimation = slideUpHeader;
     }
@@ -107,7 +128,7 @@ class Details extends React.Component {
       })
     };
 
-    const slideDownHeaderStyle = {
+    const headerStyle = {
       top: headerAnimation.interpolate({
         inputRange: [0, 1],
         outputRange: [-SCREEN_HEIGHT / 8, 0]
@@ -119,19 +140,18 @@ class Details extends React.Component {
         <AnimatedImage
           source={{ uri: url }}
           style={[imageStyle, { resizeMode: "cover" }]}
-          coordinates={coordinates}
         />
-        <LinearGradient
-          colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 0,
-            height: SCREEN_HEIGHT / 2
-          }}
-        />
-        <AnimatedHeader style={slideDownHeaderStyle}>
+        
+        <AnimatedGradient style={{ opacity: gradientAnimation }}>
+          <LinearGradient
+            colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
+            style={{
+              flex: 1
+            }}
+          />
+        </AnimatedGradient>
+
+        <AnimatedHeader style={headerStyle}>
           <Close>
             <TouchableOpacity onPress={this.onCloseHandler}>
               <Ionicons name="md-close" size={40} color="white" />
@@ -151,14 +171,16 @@ class Details extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  onCloseDetails: () => dispatch(closeDetails())
-});
+// const mapDispatchToProps = dispatch => ({
+//   onCloseDetails: () => dispatch(closeDetails())
+// });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Details);
+// export default connect(
+//   null,
+//   mapDispatchToProps
+// )(Details);
+
+export default Details;
 
 const Container = styled.View`
   flex: 1;
@@ -167,11 +189,21 @@ const Container = styled.View`
   background-color: transparent;
 `;
 
+const Gradient = styled.View`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: ${SCREEN_HEIGHT / 2};
+`;
+
+const AnimatedGradient = Animated.createAnimatedComponent(Gradient);
+
 const Header = styled.View`
   position: absolute;
   left: 10;
   right: 10;
-  height: ${SCREEN_HEIGHT / 8};
+  height: ${SCREEN_HEIGHT / 6};
 
   flex-direction: row;
   justify-content: space-between;
