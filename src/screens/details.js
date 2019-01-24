@@ -16,25 +16,19 @@ class Details extends React.Component {
 
     this.id = this.props.navigation.getParam("id");
     this.url = this.props.navigation.getParam("url");
+
+    this.fadeGradient = new Animated.Value(0);
+    this.animateBackground = new Animated.Value(0);
+    this.slideHeader = new Animated.Value(0);
+
+    this.state = {
+      isModalOpen: false,
+      isButtonFavPressed: false
+    };
   }
-
-  state = {
-    fadeInGradient: new Animated.Value(0),
-    fadeOutGradient: new Animated.Value(1),
-
-    expandBackground: new Animated.Value(0),
-    shrinkBackground: new Animated.Value(1),
-
-    slideDownHeader: new Animated.Value(0),
-    slideUpHeader: new Animated.Value(1),
-
-    isModalOpen: false,
-    isButtonFavPressed: false
-  };
 
   componentDidMount() {
     Animated.sequence([
-      // Animated.delay(3000),
       this.fadeInGradient(),
       this.expandBackground(),
       this.slideDownHeader()
@@ -55,39 +49,45 @@ class Details extends React.Component {
 
   //gradient animation
   fadeInGradient = () =>
-    Animated.timing(this.state.fadeInGradient, {
+    Animated.timing(this.fadeGradient, {
       toValue: 1,
       duration: DURATION / 10
     });
-  fadeOutGradient = () =>
-    Animated.timing(this.state.fadeOutGradient, {
+  fadeOutGradient = () => {
+    this.fadeGradient.setValue(1);
+    return Animated.timing(this.fadeGradient, {
       toValue: 0,
       duration: DURATION
     });
+  };
 
   //image animation
   expandBackground = () =>
-    Animated.timing(this.state.expandBackground, {
+    Animated.timing(this.animateBackground, {
       toValue: 1,
       duration: DURATION
     });
-  shrinkBackground = () =>
-    Animated.timing(this.state.shrinkBackground, {
+  shrinkBackground = () => {
+    this.animateBackground.setValue(1);
+    return Animated.timing(this.animateBackground, {
       toValue: 0,
       duration: DURATION
     });
+  };
 
   //header animation
   slideDownHeader = () =>
-    Animated.timing(this.state.slideDownHeader, {
+    Animated.timing(this.slideHeader, {
       toValue: 1,
       duration: DURATION
     });
-  slideUpHeader = () =>
-    Animated.timing(this.state.slideUpHeader, {
+  slideUpHeader = () => {
+    this.slideHeader.setValue(1);
+    return Animated.timing(this.slideHeader, {
       toValue: 0,
       duration: DURATION
     });
+  };
 
   onToggleFavoriteHandler = () => {
     if (this.state.isButtonFavPressed) {
@@ -104,50 +104,31 @@ class Details extends React.Component {
   render() {
     const coordinates = this.props.navigation.getParam("coordinates");
 
-    const {
-      fadeInGradient,
-      fadeOutGradient,
-      expandBackground,
-      shrinkBackground,
-      slideDownHeader,
-      slideUpHeader
-    } = this.state;
-
-    let gradientAnimation = fadeInGradient;
-    let backgroundAnimation = expandBackground;
-    let headerAnimation = slideDownHeader;
-
-    if (this.state.isModalOpen) {
-      gradientAnimation = fadeOutGradient;
-      backgroundAnimation = shrinkBackground;
-      headerAnimation = slideUpHeader;
-    }
-
     const imageStyle = {
-      top: backgroundAnimation.interpolate({
+      top: this.animateBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.top, 0]
       }),
-      left: backgroundAnimation.interpolate({
+      left: this.animateBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.left, 0]
       }),
-      height: backgroundAnimation.interpolate({
+      height: this.animateBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.height, SCREEN_HEIGHT]
       }),
-      width: backgroundAnimation.interpolate({
+      width: this.animateBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [coordinates.width, SCREEN_WIDTH]
       }),
-      borderRadius: backgroundAnimation.interpolate({
+      borderRadius: this.animateBackground.interpolate({
         inputRange: [0, 1],
         outputRange: [10, 0]
       })
     };
 
     const headerStyle = {
-      top: headerAnimation.interpolate({
+      top: this.slideHeader.interpolate({
         inputRange: [0, 1],
         outputRange: [-SCREEN_HEIGHT / 8, 0]
       })
@@ -160,7 +141,7 @@ class Details extends React.Component {
           style={[imageStyle, { resizeMode: "cover" }]}
         />
 
-        <AnimatedGradient style={{ opacity: gradientAnimation }}>
+        <AnimatedGradient style={{ opacity: this.fadeGradient }}>
           <LinearGradient
             colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
             style={{

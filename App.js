@@ -1,17 +1,12 @@
 import React from "react";
 import { I18nManager, StatusBar } from "react-native";
 import { Provider } from "react-redux";
-import {
-  createStackNavigator,
-  createAppContainer,
-  createDrawerNavigator
-} from "react-navigation";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 import storeConfig from "./src/store/storeConfig";
 
 import Home from "./src/screens/home";
 import Favorite from "./src/screens/favorite";
 import Details from "./src/screens/details";
-import SideDrawer from "./src/screens/sideDrawer";
 
 I18nManager.allowRTL(false);
 const store = storeConfig();
@@ -63,24 +58,6 @@ const DetailsModal = createStackNavigator(
   }
 );
 
-const SideDrawerModal = createStackNavigator(
-  {
-    SideDrawer: SideDrawer
-  },
-  {
-    transparentCard: true,
-    cardStyle: {
-      backgroundColor: "transparent"
-    },
-    headerMode: "none",
-    transitionConfig: () => ({
-      containerStyle: {
-        backgroundColor: "transparent"
-      }
-    })
-  }
-);
-
 const RootStack = createStackNavigator(
   {
     Home: {
@@ -91,9 +68,6 @@ const RootStack = createStackNavigator(
     },
     Details: {
       screen: DetailsModal
-    },
-    SideDrawer: {
-      screen: SideDrawerModal
     }
   },
   {

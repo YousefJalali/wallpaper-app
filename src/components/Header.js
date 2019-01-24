@@ -39,11 +39,6 @@ export default class Header extends React.Component {
           backgroundColor: headerBackground
         }}
       >
-        <Burger onPress={this.props.onPress}>
-          <Bar />
-          <Bar />
-          <Bar />
-        </Burger>
         <AnimatedTitle style={{ fontSize: titleSize }}>
           SKULL WALLPAPERS
         </AnimatedTitle>
@@ -77,21 +72,3 @@ const Title = styled.Text`
 `;
 
 const AnimatedTitle = Animated.createAnimatedComponent(Title);
-
-const Burger = styled.TouchableOpacity`
-  position: absolute;
-  top: ${HEADER_MIN_HEIGHT / 2 - 20};
-  left: 10;
-  height: 40;
-  width: 40;
-  /* border: 1px solid red; */
-
-  justify-content: space-around;
-`;
-
-const Bar = styled.View`
-  width: 100%;
-  height: 5;
-  background-color: white;
-  border-radius: 5;
-`;
