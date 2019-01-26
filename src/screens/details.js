@@ -101,6 +101,10 @@ class Details extends React.Component {
   };
 
   render() {
+    let platform = "md";
+    if (Platform.OS === "ios") {
+      platform = "ios";
+    }
     const coordinates = this.props.navigation.getParam("coordinates");
 
     const imageStyle = {
@@ -133,9 +137,9 @@ class Details extends React.Component {
       })
     };
 
-    let heartIcon = "md-heart-empty";
+    let heartIcon = `${platform}-heart-empty`;
     if (this.state.isButtonFavPressed) {
-      heartIcon = "md-heart";
+      heartIcon = `${platform}-heart`;
     }
 
     return (
@@ -157,15 +161,15 @@ class Details extends React.Component {
         <AnimatedHeader style={headerStyle}>
           <Close>
             <TouchableOpacity onPress={this.onCloseHandler}>
-              <Ionicons name="md-close" size={40} color="white" />
+              <Ionicons name={`${platform}-close`} size={35} color="white" />
             </TouchableOpacity>
           </Close>
           <Options>
             <TouchableOpacity onPress={this.onToggleFavoriteHandler}>
-              <Ionicons name={heartIcon} size={40} color="white" />
+              <Ionicons name={heartIcon} size={35} color="white" />
             </TouchableOpacity>
             <TouchableOpacity onPress={this.onCloseHandler}>
-              <Ionicons name="md-download" size={40} color="white" />
+              <Ionicons name={`${platform}-download`} size={35} color="white" />
             </TouchableOpacity>
           </Options>
         </AnimatedHeader>

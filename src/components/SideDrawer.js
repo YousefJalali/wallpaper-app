@@ -1,6 +1,6 @@
 import React from "react";
 import { withNavigation } from "react-navigation";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,42 +8,49 @@ import logo from "../assets/logo.png";
 
 const WIDTH = Dimensions.get("window").width;
 
-const sideDrawer = props => (
-  <Container onPress={this.onCloseHandler}>
-    <LinearGradient
-      start={[0, 0.5]}
-      end={[1, 0.5]}
-      colors={["#000", "transparent"]}
-      style={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
-      }}
-    />
+const sideDrawer = props => {
+  let platform = "md";
+  if (Platform.OS === "ios") {
+    platform = "ios";
+  }
 
-    <Menu>
-      <Logo source={logo} style={{ resizeMode: "stretch" }} />
-      <TouchableOpacity onPress={() => props.navigation.navigate("Home")}>
-        <Ionicons name="md-images" size={20} color="white" />
-        <MenuItem>wallpapers</MenuItem>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => props.navigation.navigate("Favorite")}>
-        <Ionicons name="md-heart-empty" size={20} color="white" />
-        <MenuItem>favorite</MenuItem>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons
-          name="md-information-circle-outline"
-          size={20}
-          color="white"
-        />
-        <MenuItem>about</MenuItem>
-      </TouchableOpacity>
-    </Menu>
-  </Container>
-);
+  return (
+    <Container onPress={this.onCloseHandler}>
+      <LinearGradient
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        colors={["#000", "transparent"]}
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0
+        }}
+      />
+
+      <Menu>
+        <Logo source={logo} style={{ resizeMode: "stretch" }} />
+        <TouchableOpacity onPress={() => props.navigation.navigate("Home")}>
+          <Ionicons name={`${platform}-images`} size={20} color="white" />
+          <MenuItem>wallpapers</MenuItem>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.navigation.navigate("Favorite")}>
+          <Ionicons name={`${platform}-heart-empty`} size={20} color="white" />
+          <MenuItem>favorite</MenuItem>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Ionicons
+            name={`${platform}-information-circle-outline`}
+            size={20}
+            color="white"
+          />
+          <MenuItem>about</MenuItem>
+        </TouchableOpacity>
+      </Menu>
+    </Container>
+  );
+};
 
 export default withNavigation(sideDrawer);
 
