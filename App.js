@@ -51,7 +51,7 @@ const DetailsModal = createStackNavigator(
     },
     headerMode: "none",
     defaultNavigationOptions: {
-      gesturesEnabled: true,
+      gesturesEnabled: true
     },
     transitionConfig: () => ({
       containerStyle: {

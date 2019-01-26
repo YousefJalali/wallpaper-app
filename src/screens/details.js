@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Animated, TouchableOpacity } from "react-native";
+import { Dimensions, Animated, TouchableOpacity, Platform } from "react-native";
 import styled from "styled-components/native";
 import { connect } from "react-redux";
 import { addToFavorite, removeFromFavorite } from "../store/actions/index";

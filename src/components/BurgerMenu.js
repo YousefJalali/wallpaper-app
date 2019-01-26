@@ -29,7 +29,10 @@ export default class BurgerMenu extends React.Component {
           {
             translateX: this.transformBurger.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, -(BURGER_SIDE / Math.sqrt(2) - BURGER_SIDE / 1.6)]
+              outputRange: [
+                0,
+                -(BURGER_SIDE / Math.sqrt(2) - BURGER_SIDE / 1.6)
+              ]
             })
           },
           {
@@ -51,7 +54,10 @@ export default class BurgerMenu extends React.Component {
           {
             translateX: this.transformBurger.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, -(BURGER_SIDE / Math.sqrt(2) - BURGER_SIDE / 1.6)]
+              outputRange: [
+                0,
+                -(BURGER_SIDE / Math.sqrt(2) - BURGER_SIDE / 1.6)
+              ]
             })
           },
           {
@@ -81,7 +87,7 @@ export default class BurgerMenu extends React.Component {
 
 const Burger = styled.TouchableOpacity`
   position: absolute;
-  top: ${HEADER_MIN_HEIGHT / 2 - 20};
+  top: ${HEADER_MIN_HEIGHT / 2 - BURGER_SIDE / 2};
   left: 10;
   height: ${BURGER_SIDE};
   width: ${BURGER_SIDE};

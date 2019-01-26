@@ -1,15 +1,12 @@
 import {
   LOAD_WALLPAPERS,
-  OPEN_DETAILS,
-  CLOSE_DETAILS,
   ADD_TO_FAVORITE,
   REMOVE_FROM_FAVORITE
 } from "../actions/actionTypes";
 
 const initialState = {
   wallpapers: [],
-  favorite: [],
-  isDetailsVisible: false
+  favorite: []
 };
 
 export default (state = initialState, action) => {
@@ -18,18 +15,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         wallpapers: action.wallpapers
-      };
-
-    case OPEN_DETAILS:
-      return {
-        ...state,
-        isDetailsVisible: true
-      };
-
-    case CLOSE_DETAILS:
-      return {
-        ...state,
-        isDetailsVisible: false
       };
 
     case ADD_TO_FAVORITE:

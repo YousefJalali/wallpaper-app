@@ -2,11 +2,11 @@ import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
 import wallpapersReducer from "./reducers/wallpapers";
-import uiReducer from "./reducers/ui";
+// import uiReducer from "./reducers/ui";
 
 const rootReducer = combineReducers({
   wallpapers: wallpapersReducer,
-  ui: uiReducer
+  // ui: uiReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
