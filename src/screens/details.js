@@ -98,7 +98,6 @@ class Details extends React.Component {
     this.setState(prevState => ({
       isButtonFavPressed: !prevState.isButtonFavPressed
     }));
-    this.props.navigation.navigate("Favorite");
   };
 
   render() {
@@ -134,6 +133,11 @@ class Details extends React.Component {
       })
     };
 
+    let heartIcon = "md-heart-empty";
+    if (this.state.isButtonFavPressed) {
+      heartIcon = "md-heart";
+    }
+
     return (
       <Container>
         <AnimatedImage
@@ -158,7 +162,7 @@ class Details extends React.Component {
           </Close>
           <Options>
             <TouchableOpacity onPress={this.onToggleFavoriteHandler}>
-              <Ionicons name="md-heart-empty" size={40} color="white" />
+              <Ionicons name={heartIcon} size={40} color="white" />
             </TouchableOpacity>
             <TouchableOpacity onPress={this.onCloseHandler}>
               <Ionicons name="md-download" size={40} color="white" />

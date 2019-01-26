@@ -15,6 +15,7 @@ import { openSideDrawer, closeSideDrawer } from "../store/actions/index";
 import background from "../assets/hero.jpg";
 import Header from "../components/Header";
 import SideDrawer from "../components/SideDrawer";
+import BurgerMenu from "../components/BurgerMenu";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -93,36 +94,6 @@ class Layout extends React.Component {
       })
     };
 
-    const burgerStyle = {
-      topBar: {
-        transform: [
-          {
-            rotate: this.transformBurger.interpolate({
-              inputRange: [0, 1],
-              outputRange: ["0deg", "-45deg"]
-            })
-          }
-        ],
-        width: this.transformBurger.interpolate({
-          inputRange: [0, 1],
-          outputRange: [40, 20]
-        })
-      },
-      bottomBar: {
-        transform: [
-          {
-            rotate: this.transformBurger.interpolate({
-              inputRange: [0, 1],
-              outputRange: ["0deg", "45deg"]
-            })
-          }
-        ],
-        width: this.transformBurger.interpolate({
-          inputRange: [0, 1],
-          outputRange: [40, 20]
-        })
-      }
-    };
     return (
       <View>
         <ImageBackground
@@ -149,16 +120,12 @@ class Layout extends React.Component {
             >
               <ScrollViewContent>{this.props.children}</ScrollViewContent>
             </ScrollView>
-            <Header
-              scrollY={this.scroll}
-              onPress={this.onBurgerPressHandler}
-            />
+            <Header scrollY={this.scroll} onPress={this.onBurgerPressHandler} />
 
-            <Burger onPress={this.onBurgerPressHandler}>
-              <AnimatedBar style={burgerStyle.topBar} />
-              <Bar />
-              <AnimatedBar style={burgerStyle.bottomBar} />
-            </Burger>
+            <BurgerMenu
+              onPress={this.onBurgerPressHandler}
+              transformBurger={this.transformBurger}
+            />
             <SideDrawer />
           </AnimatedContentWrapper>
         </ImageBackground>
@@ -207,23 +174,3 @@ const ContentWrapper = styled.View`
   height: 100%;
 `;
 const AnimatedContentWrapper = Animated.createAnimatedComponent(ContentWrapper);
-
-const Burger = styled.TouchableOpacity`
-  position: absolute;
-  top: ${HEADER_MIN_HEIGHT / 2 - 20};
-  left: 10;
-  height: 40;
-  width: 40;
-  /* border: 1px solid red; */
-
-  justify-content: space-around;
-`;
-
-const Bar = styled.View`
-  width: 40;
-  height: 5;
-  background-color: white;
-  border-radius: 5;
-`;
-
-const AnimatedBar = Animated.createAnimatedComponent(Bar);

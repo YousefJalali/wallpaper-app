@@ -50,6 +50,9 @@ const DetailsModal = createStackNavigator(
       backgroundColor: "transparent"
     },
     headerMode: "none",
+    defaultNavigationOptions: {
+      gesturesEnabled: true,
+    },
     transitionConfig: () => ({
       containerStyle: {
         backgroundColor: "transparent"
