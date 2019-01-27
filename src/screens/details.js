@@ -17,6 +17,7 @@ class Details extends React.Component {
 
     this.id = this.props.navigation.getParam("id");
     this.url = this.props.navigation.getParam("url");
+    this.coordinates = this.props.navigation.getParam("coordinates");
 
     this.fadeGradient = new Animated.Value(0);
     this.animateBackground = new Animated.Value(0);
@@ -96,14 +97,11 @@ class Details extends React.Component {
   };
 
   onToggleFavoriteHandler = () => {
-    if (this.state.isButtonFavPressed) {
+    if (this.props.favorite.includes(this.id)) {
       this.props.onRemoveFromFavorite(this.id);
     } else {
       this.props.onAddToFavorite(this.id);
     }
-    this.setState(prevState => ({
-      isButtonFavPressed: !prevState.isButtonFavPressed
-    }));
   };
 
   render() {
@@ -111,24 +109,23 @@ class Details extends React.Component {
     if (Platform.OS === "ios") {
       platform = "ios";
     }
-    const coordinates = this.props.navigation.getParam("coordinates");
 
     const imageStyle = {
       top: this.animateBackground.interpolate({
         inputRange: [0, 1],
-        outputRange: [coordinates.top, 0]
+        outputRange: [this.coordinates.top, 0]
       }),
       left: this.animateBackground.interpolate({
         inputRange: [0, 1],
-        outputRange: [coordinates.left, 0]
+        outputRange: [this.coordinates.left, 0]
       }),
       height: this.animateBackground.interpolate({
         inputRange: [0, 1],
-        outputRange: [coordinates.height, SCREEN_HEIGHT]
+        outputRange: [this.coordinates.height, SCREEN_HEIGHT]
       }),
       width: this.animateBackground.interpolate({
         inputRange: [0, 1],
-        outputRange: [coordinates.width, SCREEN_WIDTH]
+        outputRange: [this.coordinates.width, SCREEN_WIDTH]
       }),
       borderRadius: this.animateBackground.interpolate({
         inputRange: [0, 1],
@@ -143,9 +140,11 @@ class Details extends React.Component {
       })
     };
 
-    let heartIcon = `${platform}-heart-empty`;
-    if (this.state.isButtonFavPressed) {
-      heartIcon = `${platform}-heart`;
+    let heartIcon = "md-heart-empty";
+    for (let id of this.props.favorite) {
+      if (id === this.id) {
+        heartIcon = "md-heart";
+      }
     }
 
     return (
@@ -190,13 +189,17 @@ class Details extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  favorite: state.wallpapers.favorite
+});
+
 const mapDispatchToProps = dispatch => ({
   onAddToFavorite: id => dispatch(addToFavorite(id)),
   onRemoveFromFavorite: id => dispatch(removeFromFavorite(id))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Details);
 
