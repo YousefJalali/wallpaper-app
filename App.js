@@ -6,6 +6,7 @@ import storeConfig from "./src/store/storeConfig";
 
 import Home from "./src/screens/home";
 import Favorite from "./src/screens/favorite";
+import About from "./src/screens/about";
 import Details from "./src/screens/details";
 
 I18nManager.allowRTL(false);
@@ -40,6 +41,15 @@ const FavoriteStack = createStackNavigator(
   }
 );
 
+const AboutStack = createStackNavigator(
+  {
+    About: About
+  },
+  {
+    headerMode: "none"
+  }
+);
+
 const DetailsModal = createStackNavigator(
   {
     Details: Details
@@ -68,6 +78,9 @@ const RootStack = createStackNavigator(
     },
     Favorite: {
       screen: FavoriteStack
+    },
+    About: {
+      screen: AboutStack
     },
     Details: {
       screen: DetailsModal

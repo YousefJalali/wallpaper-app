@@ -1,0 +1,70 @@
+import React from "react";
+import styled from "styled-components/native";
+import { Ionicons } from "@expo/vector-icons";
+
+import Layout from "../components/Layout";
+
+export default class About extends React.Component {
+  render() {
+    return (
+      <Layout title="ABOUT">
+        <ScrollView>
+          <Text>
+            Made with&nbsp;
+            <Ionicons name="ios-heart" size={16} color="#f73859" /> from a Skull
+            Art lover. All these beautiful wallpapers are gathered from
+            different sources so you can style your phone with it. We are going
+            to add more wallpapers weekly. If you like this app please
+          </Text>
+          <Button>
+            <Title>RATE THIS APP</Title>
+          </Button>
+          <Text>
+            If you have any suggestion to improve this app please leave a
+            comment. Looking forward to your feedback.
+          </Text>
+          <Title>CREDITS</Title>
+          <Text>Background vector created by Freepik</Text>
+          <Link>https://www.freepik.com/free-photos-vectors/background</Link>
+        </ScrollView>
+      </Layout>
+    );
+  }
+}
+
+const ScrollView = styled.ScrollView`
+  flex: 1;
+  padding-right: 10;
+  padding-left: 10;
+`;
+
+const Button = styled.TouchableOpacity`
+  background-color: #f73859;
+  width: 50%;
+  align-self: center;
+  padding-top: 5;
+  padding-bottom: 15;
+  margin-top: 10;
+  margin-bottom: 10;
+`;
+
+const Text = styled.Text`
+  color: white;
+  font-size: 16;
+  text-align: center;
+`;
+
+const Title = styled.Text`
+  margin-top: 10;
+  color: white;
+  font-size: 16;
+  font-weight: 800;
+  text-align: center;
+`;
+
+const Link = styled.Text`
+  color: white;
+  font-size: 14;
+  font-style: italic;
+  text-align: center;
+`;
