@@ -1,9 +1,10 @@
 import React from "react";
 import { Dimensions, Animated, Easing } from "react-native";
-import styled from "styled-components/native";
-import { connect } from "react-redux";
-import { LinearGradient } from "expo";
 import { withNavigation } from "react-navigation";
+import styled from "styled-components/native";
+import { LinearGradient } from "expo";
+import { connect } from "react-redux";
+import { openSideDrawer, closeSideDrawer } from "../store/actions/index";
 
 import background from "../assets/hero.jpg";
 import Header from "../components/Header";
@@ -61,7 +62,7 @@ class Layout extends React.Component {
     });
   };
 
-  onBurgerPressHandler = () => {
+  toggleSideDrawerHandler = () => {
     if (this.state.isSideDrawerOpen) {
       Animated.parallel([this.backToBurger(), this.slideInContent()]).start(
         () =>
@@ -76,6 +77,22 @@ class Layout extends React.Component {
             isSideDrawerOpen: !prevState.isSideDrawerOpen
           }))
       );
+    }
+  };
+
+  //side drawer nav
+  onLinkPressHandler = route => {
+    this.toggleSideDrawerHandler();
+
+    switch (route) {
+      case "Home":
+        return this.props.navigation.navigate("Home");
+      case "Favorite":
+        return this.props.navigation.navigate("Favorite");
+      case "About":
+        return this.props.navigation.navigate("About");
+      default:
+        props.navigation.navigate("Home");
     }
   };
 
@@ -115,15 +132,15 @@ class Layout extends React.Component {
             </ScrollView>
             <Header
               scrollY={this.scroll}
-              onPress={this.onBurgerPressHandler}
+              onPress={this.toggleSideDrawerHandler}
               title={this.props.title}
             />
 
             <BurgerMenu
-              onPress={this.onBurgerPressHandler}
+              onPress={this.toggleSideDrawerHandler}
               transformBurger={this.transformBurger}
             />
-            <SideDrawer />
+            <SideDrawer linkTo={this.onLinkPressHandler} />
           </AnimatedContentWrapper>
         </ImageBackground>
       </View>
@@ -140,9 +157,12 @@ class Layout extends React.Component {
 //   onCloseSideDrawer: () => dispatch(closeSideDrawer())
 // });
 
-// export default withNavigation(connect(mapStateToProps)(Layout));
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(Layout);
 
-export default Layout;
+export default withNavigation(Layout);
 
 const View = styled.View`
   flex: 1;

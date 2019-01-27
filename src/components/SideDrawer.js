@@ -4,18 +4,20 @@ import { Dimensions, Platform } from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo";
 import { Ionicons } from "@expo/vector-icons";
+import { connect } from "react-redux";
+import { closeSideDrawer } from "../store/actions/index";
 import logo from "../assets/logo.png";
 
 const WIDTH = Dimensions.get("window").width;
 
-const sideDrawer = props => {
+export default props => {
   let platform = "md";
   if (Platform.OS === "ios") {
     platform = "ios";
   }
 
   return (
-    <Container onPress={this.onCloseHandler}>
+    <Container>
       <LinearGradient
         start={[0, 0.5]}
         end={[1, 0.5]}
@@ -31,15 +33,15 @@ const sideDrawer = props => {
 
       <Menu>
         <Logo source={logo} style={{ resizeMode: "stretch" }} />
-        <TouchableOpacity onPress={() => props.navigation.navigate("Home")}>
+        <TouchableOpacity onPress={() => props.linkTo("Home")}>
           <Ionicons name={`${platform}-images`} size={20} color="white" />
           <MenuItem>wallpapers</MenuItem>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => props.navigation.navigate("Favorite")}>
+        <TouchableOpacity onPress={() => props.linkTo("Favorite")}>
           <Ionicons name={`${platform}-heart-empty`} size={20} color="white" />
           <MenuItem>favorite</MenuItem>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => props.linkTo("About")}>
           <Ionicons
             name={`${platform}-information-circle-outline`}
             size={20}
@@ -52,7 +54,18 @@ const sideDrawer = props => {
   );
 };
 
-export default withNavigation(sideDrawer);
+// const mapStateToProps = state => ({
+//   isSideDrawerOpen: state.ui.isSideDrawerOpen
+// });
+
+// const mapDispatchToProps = dispatch => ({
+//   onCloseSideDrawer: () => dispatch(closeSideDrawer())
+// });
+
+// export default connect(
+//   null,
+//   mapDispatchToProps
+// )(SideDrawer);
 
 const Container = styled.View`
   position: absolute;
