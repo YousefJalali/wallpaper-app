@@ -18,7 +18,7 @@ class Favorite extends React.Component {
 
   render() {
     return (
-      <Layout>
+      <Layout title="FAVORITE">
         <FlatList
           title="Explore"
           data={this.loadFavorite()}

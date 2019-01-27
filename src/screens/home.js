@@ -19,7 +19,7 @@ class Home extends React.Component {
 
   render() {
     return this.state.isAppReady ? (
-      <Layout>
+      <Layout title="SKULL WALLPAPERS">
         <FlatList title="New" data={this.props.wallpapers} horizontal={true} />
         <FlatList title="Explore" data={this.props.wallpapers} />
       </Layout>

@@ -40,7 +40,7 @@ export default class Header extends React.Component {
         }}
       >
         <AnimatedTitle style={{ fontSize: titleSize }}>
-          SKULL WALLPAPERS
+          {this.props.title}
         </AnimatedTitle>
       </AnimatedHeader>
     );

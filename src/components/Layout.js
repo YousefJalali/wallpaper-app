@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  ActivityIndicator,
-  AppState,
-  Dimensions,
-  Animated,
-  Easing
-} from "react-native";
+import { Dimensions, Animated, Easing } from "react-native";
 import styled from "styled-components/native";
 import { connect } from "react-redux";
 import { LinearGradient } from "expo";
 import { withNavigation } from "react-navigation";
-import { openSideDrawer, closeSideDrawer } from "../store/actions/index";
 
 import background from "../assets/hero.jpg";
 import Header from "../components/Header";
@@ -120,7 +113,11 @@ class Layout extends React.Component {
             >
               <ScrollViewContent>{this.props.children}</ScrollViewContent>
             </ScrollView>
-            <Header scrollY={this.scroll} onPress={this.onBurgerPressHandler} />
+            <Header
+              scrollY={this.scroll}
+              onPress={this.onBurgerPressHandler}
+              title={this.props.title}
+            />
 
             <BurgerMenu
               onPress={this.onBurgerPressHandler}

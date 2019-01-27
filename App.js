@@ -78,6 +78,10 @@ const RootStack = createStackNavigator(
     transparentCard: true,
     headerMode: "none",
     transitionConfig: () => ({
+      transitionSpec: {
+        duration: 1,
+        useNativeDriver: true
+      },
       screenInterpolator: sceneProps => {
         const { position, scene } = sceneProps;
         const { index } = scene;

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { addToFavorite, removeFromFavorite } from "../store/actions/index";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
+import SwipeDownToDismiss from "../components/SwipeDownToDismiss";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
@@ -45,6 +46,11 @@ class Details extends React.Component {
       this.setState({ isModalOpen: false });
       this.props.navigation.goBack(null);
     });
+  };
+
+  onSwipeToDismissHandler = () => {
+    this.setState({ isModalOpen: false });
+    this.props.navigation.goBack(null);
   };
 
   //gradient animation
@@ -144,35 +150,41 @@ class Details extends React.Component {
 
     return (
       <Container>
-        <AnimatedImage
-          source={{ uri: this.url }}
-          style={[imageStyle, { resizeMode: "cover" }]}
-        />
-
-        <AnimatedGradient style={{ opacity: this.fadeGradient }}>
-          <LinearGradient
-            colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
-            style={{
-              flex: 1
-            }}
+        <SwipeDownToDismiss onDismiss={this.onSwipeToDismissHandler}>
+          <AnimatedImage
+            source={{ uri: this.url }}
+            style={[imageStyle, { resizeMode: "cover" }]}
           />
-        </AnimatedGradient>
 
-        <AnimatedHeader style={headerStyle}>
-          <Close>
-            <TouchableOpacity onPress={this.onCloseHandler}>
-              <Ionicons name={`${platform}-close`} size={35} color="white" />
-            </TouchableOpacity>
-          </Close>
-          <Options>
-            <TouchableOpacity onPress={this.onToggleFavoriteHandler}>
-              <Ionicons name={heartIcon} size={35} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.onCloseHandler}>
-              <Ionicons name={`${platform}-download`} size={35} color="white" />
-            </TouchableOpacity>
-          </Options>
-        </AnimatedHeader>
+          <AnimatedGradient style={{ opacity: this.fadeGradient }}>
+            <LinearGradient
+              colors={["rgba(0, 0, 0, 0.5)", "transparent"]}
+              style={{
+                flex: 1
+              }}
+            />
+          </AnimatedGradient>
+
+          <AnimatedHeader style={headerStyle}>
+            <Close>
+              <TouchableOpacity onPress={this.onCloseHandler}>
+                <Ionicons name={`${platform}-close`} size={35} color="white" />
+              </TouchableOpacity>
+            </Close>
+            <Options>
+              <TouchableOpacity onPress={this.onToggleFavoriteHandler}>
+                <Ionicons name={heartIcon} size={35} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.onCloseHandler}>
+                <Ionicons
+                  name={`${platform}-download`}
+                  size={35}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </Options>
+          </AnimatedHeader>
+        </SwipeDownToDismiss>
       </Container>
     );
   }
@@ -195,6 +207,7 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   background-color: transparent;
+  overflow: hidden;
 `;
 
 const Gradient = styled.View`
