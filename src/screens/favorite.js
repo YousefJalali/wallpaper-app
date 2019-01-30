@@ -12,20 +12,16 @@ class Favorite extends React.Component {
         this.props.favorite.includes(fav.id)
       )
     ];
-    console.log(favorite);
-    return favorite;
+    if (favorite.length === 0) {
+      return <Text>No Favorite :(</Text>;
+    }
+    return (
+      <FlatList title="" data={favorite} onPress={this.onCardPressHandler} />
+    );
   };
 
   render() {
-    return (
-      <Layout title="FAVORITE">
-        <FlatList
-          title="Explore"
-          data={this.loadFavorite()}
-          onPress={this.onCardPressHandler}
-        />
-      </Layout>
-    );
+    return <Layout title="FAVORITE">{this.loadFavorite()}</Layout>;
   }
 }
 
@@ -35,3 +31,11 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Favorite);
+
+const Text = styled.Text`
+  font-family: "Raleway-bold";
+  font-size: 40;
+  color: white;
+  opacity: 0.5;
+  text-align: center;
+`;

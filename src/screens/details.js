@@ -150,10 +150,10 @@ class Details extends React.Component {
     return (
       <Container>
         <SwipeDownToDismiss onDismiss={this.onSwipeToDismissHandler}>
-          <AnimatedImage
-            source={{ uri: this.url }}
-            style={[imageStyle, { resizeMode: "cover" }]}
-          />
+            <AnimatedImage
+              source={{ uri: this.url }}
+              style={[imageStyle, { resizeMode: "cover" }]}
+            />
 
           <AnimatedGradient style={{ opacity: this.fadeGradient }}>
             <LinearGradient
