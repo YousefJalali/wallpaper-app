@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
 import SwipeDownToDismiss from "../components/SwipeDownToDismiss";
+import Loading from "../components/Loading";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
@@ -159,6 +160,12 @@ class Details extends React.Component {
 
     return (
       <Container>
+        {this.props.isLoading ? (
+          <Loading type="loading" />
+        ) : this.props.isDownloadCompletedVisible ? (
+          <Loading type="download" />
+        ) : null}
+
         <SwipeDownToDismiss onDismiss={this.onSwipeToDismissHandler}>
           <AnimatedImage
             source={{ uri: this.url }}
@@ -200,7 +207,9 @@ class Details extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  favorite: state.wallpapers.favorite
+  favorite: state.wallpapers.favorite,
+  isLoading: state.ui.isLoading,
+  isDownloadCompletedVisible: state.ui.isDownloadCompletedVisible
 });
 
 const mapDispatchToProps = dispatch => ({
