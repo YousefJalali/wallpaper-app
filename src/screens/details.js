@@ -2,7 +2,11 @@ import React from "react";
 import { Dimensions, Animated, TouchableOpacity, Platform } from "react-native";
 import styled from "styled-components/native";
 import { connect } from "react-redux";
-import { addToFavorite, removeFromFavorite } from "../store/actions/index";
+import {
+  addToFavorite,
+  removeFromFavorite,
+  downloadWallpaper
+} from "../store/actions/index";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
 import SwipeDownToDismiss from "../components/SwipeDownToDismiss";
@@ -47,6 +51,20 @@ class Details extends React.Component {
       this.setState({ isModalOpen: false });
       this.props.navigation.goBack(null);
     });
+  };
+
+  //download wallpaper
+  onDownloadHandler = () => {
+    this.props.onDownloadWallpaper(this.id, this.url);
+  };
+
+  //add/remove wallpaper from favorite
+  onToggleFavoriteHandler = () => {
+    if (this.props.favorite.includes(this.id)) {
+      this.props.onRemoveFromFavorite(this.id);
+    } else {
+      this.props.onAddToFavorite(this.id);
+    }
   };
 
   onSwipeToDismissHandler = () => {
@@ -96,14 +114,6 @@ class Details extends React.Component {
     });
   };
 
-  onToggleFavoriteHandler = () => {
-    if (this.props.favorite.includes(this.id)) {
-      this.props.onRemoveFromFavorite(this.id);
-    } else {
-      this.props.onAddToFavorite(this.id);
-    }
-  };
-
   render() {
     let platform = "md";
     if (Platform.OS === "ios") {
@@ -150,10 +160,10 @@ class Details extends React.Component {
     return (
       <Container>
         <SwipeDownToDismiss onDismiss={this.onSwipeToDismissHandler}>
-            <AnimatedImage
-              source={{ uri: this.url }}
-              style={[imageStyle, { resizeMode: "cover" }]}
-            />
+          <AnimatedImage
+            source={{ uri: this.url }}
+            style={[imageStyle, { resizeMode: "cover" }]}
+          />
 
           <AnimatedGradient style={{ opacity: this.fadeGradient }}>
             <LinearGradient
@@ -174,7 +184,7 @@ class Details extends React.Component {
               <TouchableOpacity onPress={this.onToggleFavoriteHandler}>
                 <Ionicons name={heartIcon} size={35} color="white" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={this.onCloseHandler}>
+              <TouchableOpacity onPress={this.onDownloadHandler}>
                 <Ionicons
                   name={`${platform}-download`}
                   size={35}
@@ -195,7 +205,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onAddToFavorite: id => dispatch(addToFavorite(id)),
-  onRemoveFromFavorite: id => dispatch(removeFromFavorite(id))
+  onRemoveFromFavorite: id => dispatch(removeFromFavorite(id)),
+  onDownloadWallpaper: (id, url) => dispatch(downloadWallpaper(id, url))
 });
 
 export default connect(
