@@ -1,6 +1,9 @@
 import React from "react";
-import { Animated, Dimensions } from "react-native";
+import { Animated, Dimensions, Platform, NativeModules } from "react-native";
 import styled from "styled-components/native";
+
+const { StatusBarManager } = NativeModules;
+const STATUSBAR_HEIGHT = Platform.OS === "ios" ? 20 : StatusBarManager.HEIGHT;
 
 const HEIGHT = Dimensions.get("window").height;
 // const WIDTH = Dimensions.get("window").width;
@@ -87,12 +90,10 @@ export default class BurgerMenu extends React.Component {
 
 const Burger = styled.TouchableOpacity`
   position: absolute;
-  top: ${HEADER_MIN_HEIGHT / 2 - BURGER_SIDE / 2};
+  top: ${(HEADER_MIN_HEIGHT + STATUSBAR_HEIGHT - BURGER_SIDE) / 2};
   left: 10;
   height: ${BURGER_SIDE};
   width: ${BURGER_SIDE};
-  /* border: 1px solid red; */
-  /* overflow: hidden; */
 
   justify-content: space-between;
 `;

@@ -1,6 +1,9 @@
 import React from "react";
-import { Animated, Dimensions } from "react-native";
+import { Animated, Dimensions, Platform, NativeModules } from "react-native";
 import styled from "styled-components/native";
+
+const { StatusBarManager } = NativeModules;
+const STATUSBAR_HEIGHT = Platform.OS === "ios" ? 20 : StatusBarManager.HEIGHT;
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -42,6 +45,7 @@ export default class Header extends React.Component {
         <AnimatedTitle style={{ fontSize: titleSize }}>
           {this.props.title}
         </AnimatedTitle>
+        <Bar />
       </AnimatedHeader>
     );
   }
@@ -57,6 +61,7 @@ const HeaderStyle = styled.View`
   align-items: center;
   overflow: hidden;
   background-color: transparent;
+  padding-top: ${STATUSBAR_HEIGHT};
   /* border: 1px solid red; */
 `;
 
@@ -72,3 +77,13 @@ const Title = styled.Text`
 `;
 
 const AnimatedTitle = Animated.createAnimatedComponent(Title);
+
+const Bar = styled.View`
+  position: absolute;
+  top: ${(STATUSBAR_HEIGHT + HEADER_MIN_HEIGHT) / 2};
+  /* top: ${HEADER_MIN_HEIGHT / 2}; */
+  height: 1;
+  left: 0;
+  right: 0;
+  background-color: red;
+`;

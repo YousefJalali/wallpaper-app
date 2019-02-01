@@ -8,8 +8,10 @@ class FlatListComponent extends React.Component {
   _renderItem = ({ item }, height, width) => {
     return (
       <Card
-        onPress={e => this.onCardPressHandler(e, item.id, item.url, height, width)}
-        url={item.url}
+        onPress={e =>
+          this.onCardPressHandler(e, item.id, item.url, height, width)
+        }
+        url={item.thumbnailUrl}
         width={width}
         height={height}
       />
