@@ -4,12 +4,16 @@ import { LOAD_WALLPAPERS } from "./actionTypes";
 export const fetchWallpapers = () => {
   return dispatch => {
     axios
-      .get("https://jsonplaceholder.typicode.com/photos")
+      .get("https://skull-background.firebaseio.com/wallpapers.json")
       .then(res => {
-        const data = res.data.slice(0, 10);
-        return dispatch(loadWallpapers(data));
+        const data = res.data;
+        let wallpapers = [];
+        for (let obj in data) {
+          wallpapers.push(data[obj]);
+        }
+        return dispatch(loadWallpapers(wallpapers));
       })
-      .catch(err => alert(err));
+      .catch(() => alert("Failed to fetch wallpapers. Try again."));
   };
 };
 
