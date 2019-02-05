@@ -33,33 +33,29 @@ class Layout extends React.Component {
 
   //slide out and in the content
   slideOutContent = () =>
-    Animated.timing(this.slideContent, {
+    Animated.spring(this.slideContent, {
       toValue: 1,
-      easing: Easing.cubic,
-      duration: DURATION
+      bounciness: 10
     });
   slideInContent = () => {
     this.slideContent.setValue(1);
-    return Animated.timing(this.slideContent, {
+    return Animated.spring(this.slideContent, {
       toValue: 0,
-      easing: Easing.sin,
-      duration: DURATION
+      bounciness: 10
     });
   };
 
   //turn burger icon to back icon
   burgerToBack = () =>
-    Animated.timing(this.transformBurger, {
+    Animated.spring(this.transformBurger, {
       toValue: 1,
-      // easing: Easing.cubic,
-      duration: DURATION
+      // bounciness: 10
     });
   backToBurger = () => {
     this.transformBurger.setValue(1);
-    return Animated.timing(this.transformBurger, {
+    return Animated.spring(this.transformBurger, {
       toValue: 0,
-      // easing: Easing.sin,
-      duration: DURATION
+      // bounciness: 10
     });
   };
 
@@ -99,9 +95,9 @@ class Layout extends React.Component {
 
   render() {
     const contentStyle = {
-      left: this.slideContent.interpolate({
+      right: this.slideContent.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, WIDTH * 0.7]
+        outputRange: [0, -WIDTH * 0.7]
       })
     };
 
@@ -121,28 +117,31 @@ class Layout extends React.Component {
               bottom: 0
             }}
           />
+          <SwipeToOpenSD toggleSideDrawer={this.toggleSideDrawerHandler}>
+            <AnimatedContentWrapper style={contentStyle}>
+              <SideDrawer linkTo={this.onLinkPressHandler} />
+              <Container>
+                <ScrollView
+                  scrollEventThrottle={16}
+                  onScroll={Animated.event([
+                    { nativeEvent: { contentOffset: { y: this.scroll } } }
+                  ])}
+                >
+                  <ScrollViewContent>{this.props.children}</ScrollViewContent>
+                </ScrollView>
+                <Header
+                  scrollY={this.scroll}
+                  onPress={this.toggleSideDrawerHandler}
+                  title={this.props.title}
+                />
 
-          <AnimatedContentWrapper style={contentStyle}>
-            <ScrollView
-              scrollEventThrottle={16}
-              onScroll={Animated.event([
-                { nativeEvent: { contentOffset: { y: this.scroll } } }
-              ])}
-            >
-              <ScrollViewContent>{this.props.children}</ScrollViewContent>
-            </ScrollView>
-            <Header
-              scrollY={this.scroll}
-              onPress={this.toggleSideDrawerHandler}
-              title={this.props.title}
-            />
-
-            <BurgerMenu
-              onPress={this.toggleSideDrawerHandler}
-              transformBurger={this.transformBurger}
-            />
-            <SideDrawer linkTo={this.onLinkPressHandler} />
-          </AnimatedContentWrapper>
+                <BurgerMenu
+                  onPress={this.toggleSideDrawerHandler}
+                  transformBurger={this.transformBurger}
+                />
+              </Container>
+            </AnimatedContentWrapper>
+          </SwipeToOpenSD>
         </ImageBackground>
       </View>
     );
@@ -167,6 +166,7 @@ export default withNavigation(Layout);
 
 const View = styled.View`
   flex: 1;
+  position: relative;
 `;
 
 const ImageBackground = styled.ImageBackground`
@@ -184,11 +184,23 @@ const ScrollViewContent = styled.ScrollView`
   margin-top: ${HEADER_MAX_HEIGHT};
 `;
 
+const Container = styled.View`
+  position: relative;
+  width: ${WIDTH};
+  border: 1px solid blue;
+`;
+
 const ContentWrapper = styled.View`
   flex: 1;
   position: absolute;
   top: 0;
-  /* left: 0; */
+  right: 0;
+  width: ${WIDTH * 1.7};
   height: 100%;
+  border: 1px solid red;
+
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 const AnimatedContentWrapper = Animated.createAnimatedComponent(ContentWrapper);

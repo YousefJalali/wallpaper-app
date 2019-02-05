@@ -68,12 +68,13 @@ export default props => {
 // )(SideDrawer);
 
 const Container = styled.View`
-  position: absolute;
+  /* position: absolute;
   top: 0;
-  bottom: 0;
-  left: ${-WIDTH * 0.7};
+  bottom: 0; */
+  /* left: ${-WIDTH * 0.7}; */
   width: ${WIDTH * 0.7};
   background-color: transparent;
+  border: 1px solid yellow;
   /* border: 1px solid blue; */
 `;
 
