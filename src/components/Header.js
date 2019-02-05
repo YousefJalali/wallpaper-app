@@ -45,7 +45,7 @@ export default class Header extends React.Component {
         <AnimatedTitle style={{ fontSize: titleSize }}>
           {this.props.title}
         </AnimatedTitle>
-        <Bar />
+        {/* <Bar /> */}
       </AnimatedHeader>
     );
   }
@@ -78,12 +78,12 @@ const Title = styled.Text`
 
 const AnimatedTitle = Animated.createAnimatedComponent(Title);
 
-const Bar = styled.View`
-  position: absolute;
-  top: ${(STATUSBAR_HEIGHT + HEADER_MIN_HEIGHT) / 2};
-  /* top: ${HEADER_MIN_HEIGHT / 2}; */
-  height: 1;
-  left: 0;
-  right: 0;
-  background-color: red;
-`;
+// const Bar = styled.View`
+//   position: absolute;
+//   top: ${(STATUSBAR_HEIGHT + HEADER_MIN_HEIGHT) / 2};
+//   /* top: ${HEADER_MIN_HEIGHT / 2}; */
+//   height: 1;
+//   left: 0;
+//   right: 0;
+//   background-color: red;
+// `;

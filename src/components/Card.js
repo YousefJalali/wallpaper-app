@@ -3,7 +3,10 @@ import styled from "styled-components/native";
 
 export default props => (
   <Card onPress={props.onPress} width={props.width} height={props.height}>
-    <Image source={{ uri: props.url }} style={{ resizeMode: "cover" }} />
+    <Image
+      source={{ uri: props.url, cache: "default" }}
+      style={{ resizeMode: "cover" }}
+    />
   </Card>
 );
 

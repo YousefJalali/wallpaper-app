@@ -11,6 +11,7 @@ class FlatListComponent extends React.Component {
         onPress={e =>
           this.onCardPressHandler(e, item.id, item.url, height, width)
         }
+        // url={item.url}
         url={item.thumbnailUrl}
         width={width}
         height={height}

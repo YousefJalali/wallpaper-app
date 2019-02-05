@@ -11,7 +11,7 @@ export const fetchWallpapers = () => {
         for (let obj in data) {
           wallpapers.push(data[obj]);
         }
-        return dispatch(loadWallpapers(wallpapers));
+        return dispatch(loadWallpapers(wallpapers.reverse()));
       })
       .catch(() => alert("Failed to fetch wallpapers. Try again."));
   };

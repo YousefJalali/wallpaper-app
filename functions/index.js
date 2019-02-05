@@ -12,8 +12,8 @@ const gcs = new Storage({
   keyFilename: "./service-account-credentials.json"
 });
 
-const THUMB_MAX_HEIGHT = 316;
-const THUMB_MAX_WIDTH = 173;
+const THUMB_MAX_HEIGHT = 500;
+const THUMB_MAX_WIDTH = 500;
 const THUMB_PREFIX = "thumb_";
 
 exports.createThumbnail = functions.storage
@@ -44,8 +44,8 @@ exports.createThumbnail = functions.storage
       .then(() => {
         return spawn("convert", [
           tmpFilePath,
-          "-thumbnail",
-          `${THUMB_MAX_HEIGHT}x${THUMB_MAX_WIDTH}`,
+          "-resize",
+          `${THUMB_MAX_WIDTH}x${THUMB_MAX_HEIGHT}`,
           tmpFilePath
         ]).then(() => {
           return bucket.upload(tmpFilePath, {

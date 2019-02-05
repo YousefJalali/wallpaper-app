@@ -10,6 +10,7 @@ import background from "../assets/hero.jpg";
 import Header from "../components/Header";
 import SideDrawer from "../components/SideDrawer";
 import BurgerMenu from "../components/BurgerMenu";
+import SwipeToOpenSD from "../components/SwipeToOpenSD";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
