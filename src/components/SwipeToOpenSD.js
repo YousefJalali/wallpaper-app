@@ -10,9 +10,12 @@ export default class SwipeDownToDismiss extends React.Component {
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderRelease: (e, { dx }) => {
-        if (Math.abs(dx) > SCREEN_WIDTH * 0.3) {
+        if (dx > SCREEN_WIDTH * 0.2) {
           this.props.toggleSideDrawer();
-        }
+        } 
+        // else {
+        //   this.props.toggleSideDrawer("left");
+        // }
       }
     });
   }

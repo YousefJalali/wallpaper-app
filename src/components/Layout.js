@@ -48,19 +48,22 @@ class Layout extends React.Component {
   //turn burger icon to back icon
   burgerToBack = () =>
     Animated.spring(this.transformBurger, {
-      toValue: 1,
+      toValue: 1
       // bounciness: 10
     });
   backToBurger = () => {
     this.transformBurger.setValue(1);
     return Animated.spring(this.transformBurger, {
-      toValue: 0,
+      toValue: 0
       // bounciness: 10
     });
   };
 
-  toggleSideDrawerHandler = () => {
+  toggleSideDrawerHandler = direction => {
     if (this.state.isSideDrawerOpen) {
+      // if (direction === "right") {
+      //   return;
+      // }
       Animated.parallel([this.backToBurger(), this.slideInContent()]).start(
         () =>
           this.setState(prevState => ({
@@ -68,6 +71,9 @@ class Layout extends React.Component {
           }))
       );
     } else {
+      // if (direction === "left") {
+      //   return;
+      // }
       Animated.parallel([this.burgerToBack(), this.slideOutContent()]).start(
         () =>
           this.setState(prevState => ({
