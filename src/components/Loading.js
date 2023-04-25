@@ -1,29 +1,27 @@
-import React from "react";
-import { Dimensions } from "react-native";
-import styled from "styled-components/native";
-import { DangerZone } from "expo";
-const { Lottie } = DangerZone;
+import React from 'react'
+import styled from 'styled-components/native'
+import LottieView from 'lottie-react-native'
 
-import spinner from "../assets/spinner.json";
-import checked from "../assets/checked.json";
+import spinner from '../assets/spinner.json'
+import checked from '../assets/checked.json'
 
 export default class Loading extends React.Component {
   componentWillUnmount() {
-    this.animation.reset();
+    this.animation.reset()
   }
   componentDidMount() {
-    this.animation.play();
+    this.animation.play()
   }
 
   render() {
-    const src = this.props.type === "loading" ? spinner : checked;
+    const src = this.props.type === 'loading' ? spinner : checked
     return (
       <Modal>
         <Container>
           <Animation>
-            <Lottie
-              ref={animation => {
-                this.animation = animation;
+            <LottieView
+              ref={(animation) => {
+                this.animation = animation
               }}
               style={{ height: 100, width: 100 }}
               source={src}
@@ -31,7 +29,7 @@ export default class Loading extends React.Component {
           </Animation>
         </Container>
       </Modal>
-    );
+    )
   }
 }
 
@@ -46,20 +44,20 @@ const Modal = styled.View`
 
   justify-content: center;
   align-items: center;
-`;
+`
 
 const Container = styled.View`
   background-color: rgba(0, 0, 0, 1);
-  width: 150;
-  height: 150;
-  border-radius: 15;
+  width: 150px;
+  height: 150px;
+  border-radius: 15px;
   opacity: 0.5;
 
   justify-content: center;
   align-items: center;
-`;
+`
 
 const Animation = styled.View`
-  width: 100;
-  height: 100;
-`;
+  width: 100px;
+  height: 100px;
+`

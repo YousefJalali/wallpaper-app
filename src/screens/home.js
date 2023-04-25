@@ -1,57 +1,54 @@
-import React from "react";
-import { connect } from "react-redux";
-import styled from "styled-components/native";
-import { AppLoading } from "expo";
+import React from 'react'
+import { connect } from 'react-redux'
+import styled from 'styled-components/native'
+// import AppLoading from 'expo-app-loading'
+import * as SplashScreen from 'expo-splash-screen'
 
-import Layout from "../components/Layout";
-import FlatList from "../components/FlatList";
+import Layout from '../components/Layout'
+import FlatList from '../components/FlatList'
 
-import { fetchWallpapers } from "../store/actions/index";
-import { loadAssetsAsync } from "../store/actions/index";
+import { fetchWallpapers } from '../store/actions/index'
+import { loadAssetsAsync } from '../store/actions/index'
 
 class Home extends React.Component {
   state = {
-    isAppReady: false
-  };
+    isAppReady: false,
+  }
   componentDidMount() {
-    this.props.onFetchWallpapers();
+    this.props.onFetchWallpapers()
+
+    loadAssetsAsync()
+      .then(() => {
+        this.setState({ isAppReady: true })
+        SplashScreen.hideAsync()
+      })
+      .catch((err) => console.log(err))
   }
 
   render() {
     return this.state.isAppReady ? (
-      <Layout title="SKULL WALLPAPERS">
-        <FlatList title="New" data={this.props.wallpapers} horizontal={true} />
-        <FlatList title="Explore" data={this.props.wallpapers} />
+      <Layout title='SKULL WALLPAPERS'>
+        <FlatList title='New' data={this.props.wallpapers} horizontal={true} />
+        <FlatList title='Explore' data={this.props.wallpapers} />
       </Layout>
-    ) : (
-      <View>
-        <AppLoading
-          startAsync={loadAssetsAsync}
-          onFinish={() => this.setState({ isAppReady: true })}
-          onError={console.warn}
-        />
-      </View>
-    );
+    ) : null
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    wallpapers: state.wallpapers.wallpapers
-  };
-};
+    wallpapers: state.wallpapers.wallpapers,
+  }
+}
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchWallpapers: () => dispatch(fetchWallpapers())
-  };
-};
+    onFetchWallpapers: () => dispatch(fetchWallpapers()),
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
 
 const View = styled.View`
   flex: 1;
-`;
+`
